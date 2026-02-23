@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: jonas
+      POSTGRES_PASSWORD: jonaspassword
+      POSTGRES_DB: testdb
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
