@@ -1,7 +1,9 @@
+import { ValidationError } from "../domain/ValidationError";
+
 export function errorHandler(err, req, res, next) {
     console.error(err.stack);
 
-    if (err.message === "Name and email are required") {
+    if (err instanceof ValidationError) {
         return res.status(400).json({ error: err.message });
     }
 
