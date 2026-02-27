@@ -1,17 +1,13 @@
+import { User } from '../domain/Users.js';
+
 export class CreateUser {
     constructor (userRepository) {
         this.userRepository = userRepository;
     }
 
     async execute(userData) {
-        const { name, email } = userData;
+        const user = new User (userData.name, userData.email);
 
-        if (!name || !email) {
-            throw new Error("Name and email are required");
-        }
-
-        const newUser = await this.userRepository.save({ name, email });
-
-        return newUser;
+        return await this.userRepository.save(user);
     }
 }
