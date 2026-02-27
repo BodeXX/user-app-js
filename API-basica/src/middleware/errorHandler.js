@@ -1,4 +1,4 @@
-import { ValidationError } from "../domain/ValidationError";
+import { ValidationError } from "../domain/ValidationError.js";
 
 export function errorHandler(err, req, res, next) {
     console.error(err.stack);
