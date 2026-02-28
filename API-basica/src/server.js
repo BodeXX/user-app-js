@@ -4,7 +4,10 @@ import pkg from 'pg';
 
 import { UserRepository } from './infra/UserRepository.js';
 import { CreateUser } from './application/CreateUser.js';
+import { GetAllUsers } from './application/GetAllUsers.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { UserController } from './controllers/UserController.js';
+import { makeUserRoutes } from './routes/userRoutes.js';
 
 const { Pool } = pkg;
 
@@ -21,18 +24,10 @@ const dbPool = new Pool ({
 
 const userRepository = new UserRepository(dbPool);
 const createUserUseCase = new CreateUser(userRepository);
+const getAllUsersUseCase = new GetAllUsers(userRepository);
+const userController = new UserController(createUserUseCase, getAllUsersUseCase);
 
-
-
-app.post('/user', async (req, res, next) => {
-    console.log('Request received at /user');
-    try {
-        const result = await createUserUseCase.execute(req.body);
-        res.status(201).json(result);
-    } catch (error) {
-        next(error);
-    }
-});
+app.use('/users', makeUserRoutes(userController));
 
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' });
